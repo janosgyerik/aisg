@@ -15,3 +15,4 @@ coordinates(df) <- c('long', 'lat')
 # df <- subset(df, !duplicated(df$long * df$lat))
 
 spdf <- group(df, 20)
+spdf <- group(df, 20, distribute.leftovers = T)
