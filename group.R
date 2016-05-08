@@ -1,43 +1,39 @@
-require(sp)
 require(spdep)
 
-group <- function(df, num) {
+group <- function(spdf, num) {
   # Group the nearest num points together
   #
-  # df: data.frame with lat and long columns
+  # spdf: a SpatialPointsDataFrame
   # num: the target number of points to put in a group
   #
-  # return same data.frame as input + group column to indicate group
-  
-  # convert to SpatialPointsDataFrame, giving it @coords
-  coordinates(df) <- c('long', 'lat')
+  # return spdf with a $group vector added
   
   # add $group, set to all zeros, meaning "no group"
-  df$group <- rep(0, nrow(df))
+  spdf$group <- rep(0, nrow(spdf))
   
   # subset with no duplicate coordinates
-  nodups <- subset(df, !duplicated(df@coords))
+  nodups <- subset(spdf, !duplicated(spdf@coords))
   
   # distance matrix
   dist <- spDists(nodups, longlat = F)
-  dist <- spDists(df, longlat = F)  #TODO delete
+  dist <- spDists(spdf, longlat = F)  #TODO delete
   
-  ids <- c(1:nrow(df))
+  ids <- c(1:nrow(spdf))
   
   group <- 1
   
-  nogroup <- function() df$group == 0
+  nogroup <- function() spdf$group == 0
   
   # repeat while there are unassigned group values
   while (T) {
     count <- sum(nogroup())
     if (count <= num) {
-      df$group[nogroup()] <- group
+      spdf$group[nogroup()] <- group
       break
     }
     
     # find nearest neighbors
-    knn <- knearneigh(df[nogroup(),], k=num-1)
+    knn <- knearneigh(spdf[nogroup(),], k=num-1)
     sub.ids <- ids[nogroup()]
     
     # calculate the sum of distances within each group
@@ -49,11 +45,11 @@ group <- function(df, num) {
     
     # assign members and dupes up to num to current group
     #TODO consider dupes
-    df$group[candidates] <- group
+    spdf$group[candidates] <- group
 
     group <- group + 1
   }
-  df
+  spdf
 }
 
 calc.distances <- function(dist, knn) {
