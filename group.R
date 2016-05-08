@@ -33,7 +33,11 @@ group <- function(spdf, num, distribute.leftovers=F) {
       if (distribute.leftovers) {
         # distribute the leftovers evenly to nearest groups
         find.nearest.group <- function (rowname) {
-          tempdf <- rbind(spdf[!nogroup(),], spdf[rowname,])
+          # note: make sure the row has unique ID, rbind fails otherwise
+          row <- spdf[rowname,]
+          row.names(row) <- nrow(spdf.orig) + 1
+
+          tempdf <- rbind(spdf[!nogroup(),], row)
           knn <- knearneigh(tempdf, k=1)
           tempdf$group[knn$nn[nrow(knn$nn), 1]]
         }
