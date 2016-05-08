@@ -12,6 +12,6 @@ df <- read.csv('data/members.csv', col.names=c('lat', 'long', 'addr', 'raw_addr'
 # convert to SpatialPointsDataFrame, giving it @coords
 coordinates(df) <- c('long', 'lat')
 
-df <- subset(df, !duplicated(df$lat * df$long))
+# df <- subset(df, !duplicated(df$long * df$lat))
 
-df <- group(df, 20)
+spdf <- group(df, 20)

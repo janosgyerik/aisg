@@ -7,16 +7,18 @@ group <- function(spdf, num) {
   # num: the target number of points to put in a group
   #
   # return spdf with a $group vector added
-  
+
+  # save original
+  spdf.orig <- spdf
+
   # add $group, set to all zeros, meaning "no group"
   spdf$group <- rep(0, nrow(spdf))
   
-  # subset with no duplicate coordinates
-  nodups <- subset(spdf, !duplicated(spdf@coords))
+  # remove points with duplicate coordinates
+  spdf <- subset(spdf, !duplicated(spdf@coords))
   
   # distance matrix
-  dist <- spDists(nodups, longlat = F)
-  dist <- spDists(spdf, longlat = F)  #TODO delete
+  dist <- spDists(spdf, longlat = F)
   
   ids <- c(1:nrow(spdf))
   
@@ -50,7 +52,13 @@ group <- function(spdf, num) {
 
     group <- group + 1
   }
-  spdf
+
+  # workaround for strange spatial merge
+  df1 <- data.frame(long=spdf.orig$long, lat=spdf.orig$lat)
+  df2 <- data.frame(long=spdf$long, lat=spdf$lat, group=spdf$group)
+  m <- merge(df1, df2, by=c('lat', 'long'), sort=F)
+  spdf.orig$group <- m$group
+  spdf.orig
 }
 
 calc.distances <- function(dist, knn) {
