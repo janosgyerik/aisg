@@ -28,6 +28,7 @@ group <- function(spdf, num) {
   while (T) {
     count <- sum(nogroup())
     if (count <= num) {
+      #TODO maybe better distribute the leftovers evenly
       spdf$group[nogroup()] <- group
       break
     }
