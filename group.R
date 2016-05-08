@@ -68,14 +68,12 @@ group <- function(spdf, num, distribute.leftovers=F) {
     group <- group + 1
   }
 
-  # workaround for strange spatial merge
+  # merge group for duplicate coords
+  # ... in an awkward way: workaround for strange spatial merge
   df1 <- data.frame(long=spdf.orig@coords[,1], lat=spdf.orig@coords[,2])
   df2 <- data.frame(long=spdf@coords[,1], lat=spdf@coords[,2], group=spdf$group)
   m <- cbind(df1, df2[match(df1$long * df1$lat, df2$long * df2$lat),])
-  # m <- cbind(spdf.orig, spdf[match(c(spdf.orig$lat, spdf.orig$long), c(spdf$lat, spdf$long)),])
-  # spdf$f <- factor(spdf@coords)
-  # spdf.orig$f <- factor(spdf.orig@coords)
-  # m <- cbind(spdf.orig, spdf[match(spdf$f, spdf.orig$f)])
+
   spdf.orig$group <- m$group
   spdf.orig
 }
