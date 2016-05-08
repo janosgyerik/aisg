@@ -32,8 +32,13 @@ group <- function(spdf, num, distribute.leftovers=F) {
     if (count <= num) {
       if (distribute.leftovers) {
         # distribute the leftovers evenly to nearest groups
-        knn <- knearneigh(spdf, k=1)
-        spdf$group[nogroup()] <- spdf$group[knn$nn[nogroup(), 1]]
+        find.nearest.group <- function (rowname) {
+          tempdf <- rbind(spdf[!nogroup(),], spdf[rowname,])
+          knn <- knearneigh(tempdf, k=1)
+          tempdf$group[knn$nn[nrow(knn$nn), 1]]
+        }
+        groups <- sapply(row.names(spdf[nogroup(),]), find.nearest.group)
+        spdf$group[nogroup()] <- groups
       } else {
         # assign leftovers to last group
         spdf$group[nogroup()] <- group

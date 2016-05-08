@@ -53,6 +53,16 @@ test.distribute.leftovers <- function() {
   checkEquals(c(2, 2, 2, 1, 1), group(df, 2, distribute.leftovers = T)$group)
 }
 
+test.distribute.multiple.close.leftovers <- function() {
+  x <- c(1, 3, 4, 5, 6, 7, 8, 11)
+  df <- make.spdf(data.frame(
+    long=x,
+    lat=x
+  ))
+  checkEquals(c(2, 2, 2, 3, 3, 1, 1, 1), group(df, 3)$group)
+  checkEquals(c(2, 2, 2, 2, 1, 1, 1, 1), group(df, 3, distribute.leftovers = T)$group)
+}
+
 test.calc.distances.with.3.points <- function() {
   df <- make.spdf(data.frame(
     long=c(1, 2, 5),
