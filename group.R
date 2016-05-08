@@ -55,7 +55,8 @@ group <- function(spdf, num, distribute.leftovers=F) {
     sub.ids <- ids[nogroup()]
     
     # calculate the sum of distances within each group
-    sums <- calc.distances(dist, knn)
+    #TODO use submatrix instead of recalculating, test carefully
+    sums <- calc.distances(spDists(spdf[nogroup(),]), knn)
     
     # find the member with longest distance
     outlier <- head(which(sums == max(sums)), n=1)
