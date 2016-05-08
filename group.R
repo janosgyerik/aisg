@@ -1,10 +1,12 @@
 require(spdep)
 
-group <- function(spdf, num, distribute.leftovers=F) {
+group <- function(spdf, num, distribute.leftovers=F, dense.first=F) {
   # Group the nearest num points together
   #
   # spdf: a SpatialPointsDataFrame
   # num: the target number of points to put in a group
+  # distribute.leftovers: distribute "leftover" points in last group
+  # dense.first: select dense groups first; otherwise sparse groups first
   #
   # return spdf with a $group vector added
 
@@ -58,8 +60,13 @@ group <- function(spdf, num, distribute.leftovers=F) {
     #TODO use submatrix instead of recalculating, test carefully
     sums <- calc.distances(spDists(spdf[nogroup(),]), knn)
     
-    # find the member with longest distance
-    outlier <- head(which(sums == max(sums)), n=1)
+    # find the member with longest distance within neighbor group
+    if (dense.first) {
+      fun <- min
+    } else {
+      fun <- max
+    }
+    outlier <- head(which(sums == fun(sums)), n=1)
     candidates <- ids[sub.ids[c(outlier, knn$nn[outlier,])]]
     
     # assign members and dupes up to num to current group
