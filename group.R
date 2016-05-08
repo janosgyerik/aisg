@@ -1,6 +1,6 @@
 require(spdep)
 
-group <- function(spdf, num) {
+group <- function(spdf, num, distribute.leftovers=F) {
   # Group the nearest num points together
   #
   # spdf: a SpatialPointsDataFrame
@@ -30,8 +30,14 @@ group <- function(spdf, num) {
   while (T) {
     count <- sum(nogroup())
     if (count <= num) {
-      #TODO maybe better distribute the leftovers evenly
-      spdf$group[nogroup()] <- group
+      if (distribute.leftovers) {
+        # distribute the leftovers evenly to nearest groups
+        #TODO
+        stop('not implemented')
+      } else {
+        # assign leftovers to last group
+        spdf$group[nogroup()] <- group
+      }
       break
     }
     
