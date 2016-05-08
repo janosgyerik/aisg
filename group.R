@@ -66,8 +66,8 @@ group <- function(spdf, num, distribute.leftovers=F, dense.first=F) {
     } else {
       fun <- max
     }
-    outlier <- head(which(sums == fun(sums)), n=1)
-    candidates <- ids[sub.ids[c(outlier, knn$nn[outlier,])]]
+    member <- head(which(sums == fun(sums)), n=1)
+    candidates <- ids[sub.ids[c(member, knn$nn[member,])]]
     
     # assign members and dupes up to num to current group
     #TODO consider dupes
