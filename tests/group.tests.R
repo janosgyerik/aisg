@@ -63,6 +63,18 @@ test.distribute.multiple.close.leftovers <- function() {
   checkEquals(c(2, 2, 2, 2, 1, 1, 1, 1), group(df, 3, distribute.leftovers = T)$group)
 }
 
+test.without.long.lat.fields <- function() {
+  x <- c(1, 3, 4, 5, 6, 7, 8, 11)
+  df <- data.frame(
+    longblah=x,
+    latblah=x
+  )
+  df$junk <- rep('junk', nrow(df))
+  coordinates(df) <- c('longblah', 'latblah')
+  checkEquals(c(2, 2, 2, 3, 3, 1, 1, 1), group(df, 3)$group)
+  checkEquals(c(2, 2, 2, 2, 1, 1, 1, 1), group(df, 3, distribute.leftovers = T)$group)
+}
+
 test.calc.distances.with.3.points <- function() {
   df <- make.spdf(data.frame(
     long=c(1, 2, 5),
