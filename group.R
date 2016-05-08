@@ -1,4 +1,5 @@
 require(sp)
+require(spdep)
 
 group <- function(df, num) {
   # Group the nearest num points together
