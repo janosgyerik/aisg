@@ -18,7 +18,7 @@ group <- function(spdf, num, distribute.leftovers=F) {
   spdf <- subset(spdf, !duplicated(spdf@coords))
   
   # distance matrix
-  dist <- spDists(spdf, longlat = F)
+  dist <- spDists(spdf)
   
   ids <- c(1:nrow(spdf))
   

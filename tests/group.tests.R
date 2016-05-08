@@ -80,7 +80,7 @@ test.calc.distances.with.3.points <- function() {
     long=c(1, 2, 5),
     lat=c(0, 0, 0)
   ))
-  dist <- spDists(df, longlat = F)
+  dist <- spDists(df)
   knn <- knearneigh(df, 1)
   sums <- calc.distances(dist, knn)
   checkEquals(c(1, 1, 3), sums)
@@ -91,7 +91,7 @@ test.calc.distances.with.5.points <- function() {
     long=c(1, 2, 3, 6, 7),
     lat=c(0, 0, 0, 0, 0)
   ))
-  dist <- spDists(df, longlat = F)
+  dist <- spDists(df)
   knn <- knearneigh(df, 2)
   sums <- calc.distances(dist, knn)
   checkEquals(c(4, 4, 4, 8, 8), sums)
