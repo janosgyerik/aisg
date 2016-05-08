@@ -44,6 +44,15 @@ test.with.duplicate.points <- function() {
   checkEquals(c(2, 1, 1, 1), df$group)
 }
 
+test.distribute.leftovers <- function() {
+  df <- make.spdf(data.frame(
+    long=c(1, 2, 4, 5, 7),
+    lat=c(1, 2, 4, 5, 7)
+  ))
+  checkEquals(c(3, 2, 2, 1, 1), group(df, 2)$group)
+  checkEquals(c(2, 2, 2, 1, 1), group(df, 2, distribute.leftovers = T)$group)
+}
+
 test.calc.distances.with.3.points <- function() {
   df <- make.spdf(data.frame(
     long=c(1, 2, 5),

@@ -32,8 +32,8 @@ group <- function(spdf, num, distribute.leftovers=F) {
     if (count <= num) {
       if (distribute.leftovers) {
         # distribute the leftovers evenly to nearest groups
-        #TODO
-        stop('not implemented')
+        knn <- knearneigh(spdf, k=1)
+        spdf$group[nogroup()] <- spdf$group[knn$nn[nogroup(), 1]]
       } else {
         # assign leftovers to last group
         spdf$group[nogroup()] <- group
